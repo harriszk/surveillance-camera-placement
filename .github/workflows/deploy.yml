@@ -1,5 +1,9 @@
 name: Deploy Web App to GitHub Pages
 
+permissions:
+    contents: read
+    pull-requests: write
+
 on:
     workflow_dispatch:
     push:
@@ -31,7 +35,7 @@ jobs:
 
             # Deploy the app
             - name: Deploy to GitHub Pages
-              uses: peaceiris/actions-gh-pages@v3
+              uses: peaceiris/actions-gh-pages@aa83d0c2cfc3d813560e13068d3152aa21490171
               with:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
                   publish_dir: "./dist"

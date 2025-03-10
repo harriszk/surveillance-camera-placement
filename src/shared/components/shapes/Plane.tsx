@@ -1,19 +1,19 @@
-import * as THREE from "three";
-
 interface PlaneProps {
     rotation?: [x: number, y: number, z: number];
+    position?: [x: number, y: number, z: number];
     size?: [width: number, height: number];
     color?: string;
 }
 
 const Plane: React.FC<PlaneProps> = (props) => {
     return (
-        <mesh visible rotation={props.rotation ?? [0, 0, 0]}>
+        <mesh
+            visible
+            position={props.position}
+            rotation={props.rotation ?? [0, 0, 0]}
+        >
             <planeGeometry args={props.size ?? [1, 1]} />
-            <meshBasicMaterial
-                color={props.color ?? "0xFFFFFF"}
-                side={THREE.DoubleSide}
-            />
+            <meshBasicMaterial color={props.color ?? "0xFFFFFF"} side={2} />
         </mesh>
     );
 };

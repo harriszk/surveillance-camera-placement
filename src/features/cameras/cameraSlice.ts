@@ -1,13 +1,13 @@
-import * as Three from 'three';
+import * as Three from "three";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Camera {
     id: string;
     name: string;
-    position: Three.Vector3
-    direction: Three.Vector3
-    right: Three.Vector3
-    up: Three.Vector3
+    position: Three.Vector3;
+    direction: Three.Vector3;
+    right: Three.Vector3;
+    up: Three.Vector3;
     fov?: number;
     active?: boolean;
 }
@@ -17,22 +17,22 @@ interface CamerasState {
 }
 
 const initialState: CamerasState = {
-    cameras: []
-}
+    cameras: [],
+};
 
 const camerasSlice = createSlice({
-    name: 'cameras',
+    name: "cameras",
     initialState,
     reducers: {
         addCamera(state, action: PayloadAction<Camera>) {
             state.cameras.push(action.payload);
         },
         removeCamera(state, action: PayloadAction<string>) {
-            state.cameras = state.cameras.filter((camera) => camera.id !== action.payload);
+            state.cameras = state.cameras.filter(
+                (camera) => camera.id !== action.payload,
+            );
         },
-        // resetCamera(state, action: PayloadAction<string>) {
-        // }
-    }
-})
+    },
+});
 
 export default camerasSlice.reducer;

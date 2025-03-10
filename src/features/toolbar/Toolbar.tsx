@@ -1,9 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import {
-    selectCameraLock,
-    setActiveAction,
-    toggleLockCamera,
-} from "../ui/uiSlice";
+import { selectCameraLock, toggleLockCamera } from "../ui/uiSlice";
 
 type ActionButton = {
     action: string;
@@ -43,18 +39,17 @@ const Toolbar: React.FC = () => {
                 dispatch(toggleLockCamera());
                 break;
             default:
-                dispatch(setActiveAction(action));
                 break;
         }
     };
 
     return (
-        <div className="bg-zinc-200 text-black p-4 drop-shadow-md z-1">
+        <div className="bg-blue-500 text-black p-4">
             {actions.map((action, index) => {
                 return (
                     <button
                         key={index}
-                        className="bg-zinc-50 text-black p-2 m-2 hover:bg-zinc-300 active:bg-zinc-400"
+                        className="bg-white text-black p-2 m-2 hover:bg-gray-300 active:bg-gray-400"
                         onClick={() => actionHandler(action.action)}
                     >
                         {action.label}

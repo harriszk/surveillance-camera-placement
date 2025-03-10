@@ -1,15 +1,8 @@
 import { Canvas } from "@react-three/fiber";
-import {
-    OrbitControls,
-    OrbitControlsChangeEvent,
-    Plane,
-} from "@react-three/drei";
-import { selectActiveAction, selectCameraLock } from "../ui/uiSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { OrbitControls, OrbitControlsChangeEvent } from "@react-three/drei";
+import { selectCameraLock } from "../ui/uiSlice";
+import { useSelector } from "react-redux";
 import { useState } from "react";
-import { Sphere } from "@react-three/drei";
-import { selectVertices, toggleVertexColor } from "./sceneSlice";
-import PointPlacer from "./PointPlacer";
 
 type DebugInfo = {
     position: { x: number; y: number; z: number };
@@ -17,10 +10,7 @@ type DebugInfo = {
 };
 
 const Scene: React.FC = () => {
-    const dispatch = useDispatch();
     const lock = useSelector(selectCameraLock);
-    const vertices = useSelector(selectVertices);
-    const activeAction = useSelector(selectActiveAction);
     const [debugMode, setDebugMode] = useState<boolean>(false);
     const [debugInfo, setDebugInfo] = useState<DebugInfo>({
         position: {
@@ -37,7 +27,7 @@ const Scene: React.FC = () => {
                 <div className="flex items-center gap-2">
                     <label htmlFor="debug">Debug</label>
                     <input
-                        className="w-6 h-6 bg-white appearance-none border-2 rounded-sm border-gray-500 checked:bg-sky-300 checked:border-sky-500"
+                        className="w-5 h-5 bg-white appearance-none border-2 rounded-sm border-gray-500 checked:bg-red-300 checked:border-red-500"
                         id="debug"
                         type="checkbox"
                         name="debug"
@@ -73,11 +63,10 @@ const Scene: React.FC = () => {
                     zoom: debugInfo.zoom,
                 }}
             >
-                <color attach="background" args={["#F5F5F5"]} />
                 {!lock && (
                     <OrbitControls
                         enableZoom={true}
-                        enablePan={true}
+                        enablePan={false}
                         enableRotate={true}
                         onChange={(e: OrbitControlsChangeEvent | undefined) => {
                             if (!e || !debugMode) {
@@ -91,32 +80,11 @@ const Scene: React.FC = () => {
                         }}
                     />
                 )}
-
-                {activeAction === "Place Point" && <PointPlacer />}
-
-                {vertices.map((vertex) => {
-                    return (
-                        <Sphere
-                            key={vertex.key}
-                            args={[0.035]}
-                            position={vertex.position}
-                            onClick={() => {
-                                console.log(`Point ${vertex.key} was clicked!`);
-                                dispatch(toggleVertexColor(vertex.key));
-                            }}
-                        >
-                            <meshBasicMaterial color={vertex.color} />
-                        </Sphere>
-                    );
-                })}
-
-                <Plane
-                    visible={true}
-                    rotation={[Math.PI / 2, 0, 0]}
-                    args={[5, 5]}
-                >
-                    <meshBasicMaterial side={2} />
-                </Plane>
+                <color attach="background" args={["#f6d186"]} />
+                <mesh>
+                    <boxGeometry args={[1, 1, 1]} />
+                    <meshStandardMaterial color="green" wireframe={true} />
+                </mesh>
             </Canvas>
         </div>
     );

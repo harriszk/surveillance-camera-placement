@@ -4,12 +4,16 @@ import {
     OrbitControlsChangeEvent,
     Plane,
 } from "@react-three/drei";
-import { selectActiveAction, selectCameraLock } from "../ui/uiSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { JSX, useState } from "react";
 import { Sphere } from "@react-three/drei";
-import { selectVertices, toggleVertexColor } from "./sceneSlice";
-import PointPlacer from "./PointPlacer";
+import {
+    selectCameraLock,
+    selectVertices,
+    toggleVertexColor,
+} from "./sceneSlice";
+import PointPlacementTool from "./PointPlacementTool";
+import { selectActiveAction, UserActionType } from "../toolbar/toolbarSlice";
 
 type DebugInfo = {
     position: { x: number; y: number; z: number };
@@ -30,6 +34,12 @@ const Scene: React.FC = () => {
         },
         zoom: 220,
     });
+
+    const userActionSceneComponents: Partial<
+        Record<UserActionType, JSX.Element>
+    > = {
+        [UserActionType.PLACE_POINT]: <PointPlacementTool />,
+    };
 
     return (
         <div className="relative w-full h-full">
@@ -92,7 +102,7 @@ const Scene: React.FC = () => {
                     />
                 )}
 
-                {activeAction === "Place Point" && <PointPlacer />}
+                {userActionSceneComponents[activeAction]}
 
                 {vertices.map((vertex) => {
                     return (
@@ -101,7 +111,6 @@ const Scene: React.FC = () => {
                             args={[0.035]}
                             position={vertex.position}
                             onClick={() => {
-                                console.log(`Point ${vertex.key} was clicked!`);
                                 dispatch(toggleVertexColor(vertex.key));
                             }}
                         >

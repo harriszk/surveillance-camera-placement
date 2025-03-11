@@ -1,63 +1,57 @@
 import { useDispatch, useSelector } from "react-redux";
-import {
-    selectCameraLock,
-    setActiveAction,
-    toggleLockCamera,
-} from "../ui/uiSlice";
+import { setActiveAction, UserActionType } from "./toolbarSlice";
+import { selectCameraLock, toggleLockCamera } from "../scene/sceneSlice";
 
-type ActionButton = {
-    action: string;
+type Button = {
+    type: UserActionType;
     label: string;
+    action?: () => void;
 };
 
 const Toolbar: React.FC = () => {
     const dispatch = useDispatch();
     const lock = useSelector(selectCameraLock);
 
-    const actions: ActionButton[] = [
+    const actionButtons: Button[] = [
         {
-            action: "Default",
+            type: UserActionType.DEFAULT,
             label: "Default",
         },
         {
-            action: "Place Point",
+            type: UserActionType.PLACE_POINT,
             label: "Place Point",
         },
         {
-            action: "Add Camera",
+            type: UserActionType.ADD_CAMERA,
             label: "Add Camera",
         },
         {
-            action: "Load Model",
+            type: UserActionType.LOAD_MODEL,
             label: "Load Model",
         },
         {
-            action: "Toggle Lock",
+            type: UserActionType.TOGGLE_LOCK,
             label: lock ? "Unlock Camera" : "Lock Camera",
+            action: () => dispatch(toggleLockCamera()),
         },
     ];
 
-    const actionHandler = (action: string) => {
-        switch (action) {
-            case "Toggle Lock":
-                dispatch(toggleLockCamera());
-                break;
-            default:
-                dispatch(setActiveAction(action));
-                break;
-        }
-    };
-
     return (
         <div className="bg-zinc-200 text-black p-4 drop-shadow-md z-1">
-            {actions.map((action, index) => {
+            {actionButtons.map((button, index) => {
                 return (
                     <button
                         key={index}
                         className="bg-zinc-50 text-black p-2 m-2 hover:bg-zinc-300 active:bg-zinc-400"
-                        onClick={() => actionHandler(action.action)}
+                        onClick={() => {
+                            if (button.action) {
+                                return button.action();
+                            }
+
+                            dispatch(setActiveAction(button.type));
+                        }}
                     >
-                        {action.label}
+                        {button.label}
                     </button>
                 );
             })}

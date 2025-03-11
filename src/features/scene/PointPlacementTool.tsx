@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import * as THREE from "three";
 import { addVertex } from "./sceneSlice";
 
-const PointPlacer: React.FC = () => {
+const PointPlacementTool: React.FC = () => {
     const [hoveredPoint, setHoveredPoint] = useState<
         [number, number, number] | null
     >(null);
@@ -30,7 +30,6 @@ const PointPlacer: React.FC = () => {
                 args={[0.035]}
                 position={hoveredPoint}
                 onClick={() => {
-                    console.log(`Hovered point was clicked!`);
                     dispatch(
                         addVertex({
                             key: "",
@@ -38,7 +37,6 @@ const PointPlacer: React.FC = () => {
                             color: "#A1C3FF",
                         }),
                     );
-                    // dispatch(toggleVertexColor(point.key));
                 }}
             >
                 <meshBasicMaterial color="blue" />
@@ -47,4 +45,4 @@ const PointPlacer: React.FC = () => {
     );
 };
 
-export default PointPlacer;
+export default PointPlacementTool;

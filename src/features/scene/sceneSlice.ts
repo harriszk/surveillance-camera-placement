@@ -10,6 +10,7 @@ type VertexData = {
 };
 
 interface SceneState {
+    lockCamera: boolean;
     vertices: VertexData[];
 }
 
@@ -57,6 +58,7 @@ interface SceneState {
 // ];
 
 const initialState: SceneState = {
+    lockCamera: false,
     vertices: [
         {
             key: "origin",
@@ -85,10 +87,8 @@ const sceneSlice = createSlice({
     name: "scene",
     initialState,
     reducers: {
-        toggleVertexColor(state, payload: PayloadAction<string>) {
-            const vertex = state.vertices.find(
-                (v) => v.key === payload.payload,
-            );
+        toggleVertexColor(state, action: PayloadAction<string>) {
+            const vertex = state.vertices.find((v) => v.key === action.payload);
 
             if (vertex) {
                 const colorOrder: Colors[] = ["#A1C3FF", "#B0B0B0"];
@@ -97,16 +97,22 @@ const sceneSlice = createSlice({
                     colorOrder[(currentIndex + 1) % colorOrder.length];
             }
         },
-        addVertex(state, payload: PayloadAction<VertexData>) {
-            payload.payload.key = uuidv4();
-            state.vertices.push(payload.payload);
+        addVertex(state, action: PayloadAction<VertexData>) {
+            action.payload.key = uuidv4();
+            state.vertices.push(action.payload);
+        },
+        toggleLockCamera(state) {
+            state.lockCamera = !state.lockCamera;
         },
     },
 });
 
 export const selectVertices = (state: { scene: SceneState }) =>
     state.scene.vertices;
+export const selectCameraLock = (state: { scene: SceneState }) =>
+    state.scene.lockCamera;
 
-export const { toggleVertexColor, addVertex } = sceneSlice.actions;
+export const { toggleVertexColor, addVertex, toggleLockCamera } =
+    sceneSlice.actions;
 
 export default sceneSlice.reducer;

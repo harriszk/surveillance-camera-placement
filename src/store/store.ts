@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import camerasReducer from "../features/cameras/cameraSlice";
-import uiReducer from "../features/ui/uiSlice";
+import camerasReducer from "../features/scene/cameras/cameraSlice";
 import sceneReducer from "../features/scene/sceneSlice";
+import toolbarReducer from "../features/toolbar/toolbarSlice";
 
 const store = configureStore({
     reducer: {
-        ui: uiReducer,
-        cameras: camerasReducer,
+        toolbar: toolbarReducer,
         scene: sceneReducer,
+        cameras: camerasReducer,
     },
 });
 
